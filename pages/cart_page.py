@@ -4,17 +4,15 @@ from playwright.sync_api import Page, expect
 class CartPage:
     def __init__(self, page: Page):
         self.page = page
-        self.cart_items = page.locator(".cart_item_label")
+        self.cart_items = page.locator(".cart_item")
+        self.checkout_button = page.get_by_role("button", name="Checkout")
 
-    def open(self):
-        self.page.locator(".shopping_cart_link").click()
-    
     def is_loaded(self):
-        expect(self.page).to_have_url("https://www.saucedemo.com/cart.html")
+        return self.page.get_by_text("Your Cart").is_visible()
 
-    def expect_product_visible(self, product_name: str):
-        product = self.cart_items.locator(
-            ".inventory_item_name"
-        ).filter(has_text=product_name)
-
+    def expect_product(self, product_name: str):
+        product = self.cart_items.filter(has_text=product_name)
         expect(product).to_be_visible()
+
+    def checkout(self):
+        self.checkout_button.click()

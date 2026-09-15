@@ -14,3 +14,9 @@ def test_add_product_to_cart(logged_in_page, product):
     inventory_page.add_product_to_cart(product)
     inventory_page.expect_product_in_cart(product)
 
+    inventory_page.shopping_cart.click()
+
+    cart_page = CartPage(logged_in_page)
+    
+    expect(cart_page.cart_items.filter(has_text=product)).to_be_visible()
+
