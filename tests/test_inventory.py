@@ -32,21 +32,19 @@ def test_cart_with_multiple_products(pages):
     inventory_page = pages["inventory"]
     cart_page = pages["cart"]
 
-    products = [
-        "Sauce Labs Backpack",
-        "Sauce Labs Bike Light",
-        "Sauce Labs Bolt T-Shirt",
-    ]
+    products = PRODUCTS[:3]
 
     for product in products:
-        inventory_page.add_product_to_cart(product)
+        inventory_page.add_product_to_cart(product["name"])
 
     inventory_page.shopping_cart.click()
 
     for product in products:
-        expect(cart_page.cart_items.filter(has_text=product)).to_be_visible()
+        expect(cart_page.cart_items.filter(
+            has_text=product["name"])
+        ).to_be_visible()
 
-    expect(cart_page.cart_items).to_have_count(3)
+    expect(cart_page.cart_items).to_have_count(len(products))
 
 def test_checkout_requires_first_name(pages):
     inventory_page = pages["inventory"]
