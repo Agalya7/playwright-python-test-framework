@@ -8,6 +8,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,4 +29,4 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest
+          pytest --browser ${{ matrix.browser }}
